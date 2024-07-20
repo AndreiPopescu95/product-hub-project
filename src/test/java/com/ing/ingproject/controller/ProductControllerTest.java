@@ -23,6 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
+    private static final String GET_ALL_PRODUCTS = "/v1/products/all";
+    private final String PRODUCT_1 = "Product 1";
+    private final String PRODUCT_2 = "Product 2";
+    private final Integer ID_1 = 1;
+    private final Integer ID_2 = 2;
+    private final Double PRICE_1 = 10.0;
+    private final Double PRICE_2 = 20.0;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -34,21 +42,21 @@ class ProductControllerTest {
     public void getAllProductsTest() throws Exception {
         when(productService.getAllProducts()).thenReturn(createProductList());
 
-        mockMvc.perform(get("/v1/products/all"))
+        mockMvc.perform(get(GET_ALL_PRODUCTS))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].productName", is("Product 1")))
-                .andExpect(jsonPath("$[0].productId", is(1)))
-                .andExpect(jsonPath("$[0].price", is(10.0)))
-                .andExpect(jsonPath("$[1].productName", is("Product 2")))
-                .andExpect(jsonPath("$[1].productId", is(2)))
-                .andExpect(jsonPath("$[1].price", is(20.0)));
+                .andExpect(jsonPath("$[0].productName", is(PRODUCT_1)))
+                .andExpect(jsonPath("$[0].productId", is(ID_1)))
+                .andExpect(jsonPath("$[0].price", is(PRICE_1)))
+                .andExpect(jsonPath("$[1].productName", is(PRODUCT_2)))
+                .andExpect(jsonPath("$[1].productId", is(ID_2)))
+                .andExpect(jsonPath("$[1].price", is(PRICE_2)));
     }
 
     private List<Product> createProductList() {
         return List.of(
-                createProduct(1L, "Product 1", 10.0),
-                createProduct(2L, "Product 2", 20.0)
+                createProduct(Long.valueOf(ID_1), PRODUCT_1, PRICE_1),
+                createProduct(Long.valueOf(ID_2), PRODUCT_2, PRICE_2)
         );
     }
 }
