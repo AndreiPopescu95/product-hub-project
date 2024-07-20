@@ -8,14 +8,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.ing.ingproject.utils.ProductTestUtils.createDefaultProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
+
+    private static final String DEFAULT_PRODUCT_NAME = "testProduct";
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -25,18 +29,30 @@ class ProductServiceImplTest {
 
     @Test
     void getAllProductsTest() {
-        List<Product> expectedProducts = generateDefaultProductList();
+        Set<Product> expectedProducts = generateDefaultProductList();
 
         when(productDatabase.getProducts()).thenReturn(expectedProducts);
 
-        List<Product> resultProducts = productService.getAllProducts();
+        Set<Product> resultProducts = productService.getAllProducts();
 
         assertEquals(expectedProducts, resultProducts);
     }
 
-    private List<Product> generateDefaultProductList() {
+    @Test
+    void getProductByNameTest() {
+        Product expectedProduct = createDefaultProduct();
+        Set<Product> expectedProducts = Set.of(expectedProduct);
+        when(productDatabase.getProducts()).thenReturn(expectedProducts);
+
+        Optional<Product> actualProductOptional = productService.getProductByName(DEFAULT_PRODUCT_NAME);
+
+        assertTrue(actualProductOptional.isPresent());
+        assertEquals(expectedProduct, actualProductOptional.get());
+    }
+
+    private Set<Product> generateDefaultProductList() {
         Product product = createDefaultProduct();
 
-        return List.of(product);
+        return Set.of(product);
     }
 }

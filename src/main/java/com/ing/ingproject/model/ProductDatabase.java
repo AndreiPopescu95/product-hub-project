@@ -3,10 +3,10 @@ package com.ing.ingproject.model;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Component
 public class ProductDatabase {
-    private List<Product> products;
+    private Set<Product> products;
 }
