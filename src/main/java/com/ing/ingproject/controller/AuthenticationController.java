@@ -1,20 +1,25 @@
 package com.ing.ingproject.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1")
 public class AuthenticationController {
 
-    @GetMapping("/login")
+    @GetMapping("/v1/login")
     public String login() {
         return "Authentication Successful";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/v1/logout")
     public String findProduct() {
         return "Logout Successful";
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminOnly() {
+        return "This is for Admin only";
     }
 }
