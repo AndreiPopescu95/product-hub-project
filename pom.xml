@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ing</groupId>
-    <artifactId>ing-project</artifactId>
+    <artifactId>product-hub-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ing-project</name>
-    <description>ing-project</description>
+    <name>product-hub-project</name>
+    <description>product-hub-project</description>
     <url/>
     <licenses>
         <license/>
