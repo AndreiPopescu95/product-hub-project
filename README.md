@@ -50,11 +50,27 @@ The application will start and be accessible at `http://localhost:8082`.
 
 ## Security and Authentication
 
-The API endpoints are protected using basic authentication. You need to provide a valid username and password to access the endpoints. Update the security configuration as needed for your use case.
+The API endpoints are protected using basic authentication. You need to provide a valid username and password to access the endpoints.
 
 ### Sample Security Configuration
 
-The current configuration allows all authenticated users to access the endpoints without any specific roles.
+The current configuration allows all authenticated users to access the endpoints witht he followinf roles:
+- USER
+- ADMIN
+
+### Login
+
+To login access the default login form:
+```http
+http://localhost:8082/login
+```
+Also, you are able to login by adding the username and password in the request or in Postman's Authentication tab
+
+### Logout
+To logout:
+```http
+http://localhost:8082/logout
+```
 
 ## API Endpoints
 

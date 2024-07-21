@@ -40,7 +40,7 @@ class ProductControllerTest {
     private ProductService productService;
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "user")
     public void getAllProductsTest() throws Exception {
         when(productService.getAllProducts()).thenReturn(createProductList());
 
@@ -54,7 +54,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "user")
     public void findProductTest() throws Exception {
         when(productService.getProductByName(PRODUCT_1)).thenReturn(Optional.of(createProduct(PRODUCT_1, PRICE_1)));
 
@@ -65,7 +65,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "user")
     public void findProductNoProductTest() throws Exception {
         when(productService.getProductByName(PRODUCT_1)).thenReturn(Optional.empty());
 
