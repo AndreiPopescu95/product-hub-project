@@ -1,7 +1,9 @@
 package com.ing.ingproject.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ing.ingproject.model.Product;
+import com.ing.ingproject.security.SecurityConfig;
 import com.ing.ingproject.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +16,17 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.ing.ingproject.utils.ProductTestUtils.createDefaultProduct;
 import static com.ing.ingproject.utils.ProductTestUtils.createProduct;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductController.class)
+@WebMvcTest({ProductController.class, SecurityConfig.class})
 class ProductControllerTest {
 
     private static final String GET_ALL_PRODUCTS = "/v1/products/all";
@@ -35,6 +39,9 @@ class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private ProductService productService;
@@ -72,6 +79,19 @@ class ProductControllerTest {
         mockMvc.perform(get(FIND_PRODUCT,PRODUCT_1))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", is(String.format("Product not found with name: %s", PRODUCT_1))));
+    }
+
+    @Test
+    @WithMockUser(username = "user")
+    public void addProductTest() throws Exception {
+        Product product = createDefaultProduct();
+
+        mockMvc.perform(post("/v1/products/add")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.productName").value(product.productName()))
+                .andExpect(jsonPath("$.price").value(product.price()));
     }
 
     private Set<Product> createProductList() {

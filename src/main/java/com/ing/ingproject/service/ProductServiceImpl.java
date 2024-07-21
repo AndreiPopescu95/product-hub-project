@@ -29,4 +29,9 @@ public class ProductServiceImpl implements ProductService {
                 .filter(product -> productName.equals(product.productName()))
                 .findFirst();
     }
+
+    @Override
+    public void addProduct(Product product) {
+        productDatabase.addProduct(product);
+    }
 }

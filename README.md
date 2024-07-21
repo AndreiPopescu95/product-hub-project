@@ -115,8 +115,21 @@ GET /api/products/Product%201
 Authorization: Basic <base64_encoded_credentials>
 ```
 
-#### Example Response
+### Add Product
 
+- **URL**: `/api/products/add`
+- **Method**: `POST`
+- **Payload**: 
+```json
+  {
+  "productName": "Product 1",
+  "price": 10.0
+  }
+```
+- **Response**: JSON object of the created product
+
+#### Example Response
+201 Created
 ```json
 {
   "productName": "Product 1",

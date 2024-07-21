@@ -10,4 +10,6 @@ public interface ProductService {
     Set<Product> getAllProducts();
 
     Optional<Product> getProductByName(String productName);
+
+    void addProduct(Product product);
 }

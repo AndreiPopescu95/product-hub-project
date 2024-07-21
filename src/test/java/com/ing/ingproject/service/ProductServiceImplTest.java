@@ -14,6 +14,7 @@ import java.util.Set;
 import static com.ing.ingproject.utils.ProductTestUtils.createDefaultProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +49,15 @@ class ProductServiceImplTest {
 
         assertTrue(actualProductOptional.isPresent());
         assertEquals(expectedProduct, actualProductOptional.get());
+    }
+
+    @Test
+    void addProductTest() {
+        Product expectedProduct = createDefaultProduct();
+
+        productService.addProduct(expectedProduct);
+
+        verify(productDatabase).addProduct(expectedProduct);
     }
 
     private Set<Product> generateDefaultProductList() {
