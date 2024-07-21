@@ -3,6 +3,7 @@ package com.ing.ingproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ing.ingproject.model.Product;
+import com.ing.ingproject.model.ProductUpdateRequest;
 import com.ing.ingproject.security.SecurityConfig;
 import com.ing.ingproject.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -17,12 +18,14 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.ing.ingproject.utils.ProductTestUtils.createDefaultProduct;
+import static com.ing.ingproject.utils.ProductTestUtils.createDefaultProductUpdate;
 import static com.ing.ingproject.utils.ProductTestUtils.createProduct;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -92,6 +95,22 @@ class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.productName").value(product.productName()))
                 .andExpect(jsonPath("$.price").value(product.price()));
+    }
+
+    @Test
+    @WithMockUser(username = "user")
+    public void updateProductTest() throws Exception {
+        ProductUpdateRequest productUpdate = createDefaultProductUpdate();
+        Product product = createProduct(PRODUCT_1, productUpdate.getPrice());
+
+        when(productService.updateProduct(PRODUCT_1, productUpdate)).thenReturn(Optional.of(product));
+
+        mockMvc.perform(put("/v1/products/update/{productName}", PRODUCT_1)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(productUpdate)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productName").value(PRODUCT_1))
+                .andExpect(jsonPath("$.price").value(productUpdate.getPrice()));
     }
 
     private Set<Product> createProductList() {

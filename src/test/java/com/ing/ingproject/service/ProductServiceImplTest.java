@@ -2,6 +2,7 @@ package com.ing.ingproject.service;
 
 import com.ing.ingproject.model.Product;
 import com.ing.ingproject.model.ProductDatabase;
+import com.ing.ingproject.model.ProductUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -64,5 +65,19 @@ class ProductServiceImplTest {
         Product product = createDefaultProduct();
 
         return Set.of(product);
+    }
+
+    @Test
+    void updateProduct() {
+        double productPrice = 5.0;
+        ProductUpdateRequest updatedProduct = new ProductUpdateRequest(productPrice);
+
+        when(productDatabase.updateProduct(DEFAULT_PRODUCT_NAME, updatedProduct))
+                .thenReturn(Optional.of(new Product(DEFAULT_PRODUCT_NAME, updatedProduct.getPrice())));
+
+        Optional<Product> finalProduct = productService.updateProduct(DEFAULT_PRODUCT_NAME, updatedProduct);
+
+        assertTrue(finalProduct.isPresent());
+        assertEquals(productPrice, finalProduct.get().price());
     }
 }

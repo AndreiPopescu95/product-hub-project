@@ -137,6 +137,27 @@ Authorization: Basic <base64_encoded_credentials>
 }
 ```
 
+### Update Product
+
+- **URL**: `/api/products/update/{productName}`
+- **Method**: `PUT`
+- **Payload**: 
+```json
+  {
+  "price": 10.0
+  }
+```
+- **Response**: JSON object of the updated product
+
+#### Example Response
+
+```json
+{
+  "productName": "Product 1",
+  "price": 10.0
+}
+```
+
 ### Exception Handling
 
 If a product is not found, the API will return a `404 Not Found` status with a descriptive error message.

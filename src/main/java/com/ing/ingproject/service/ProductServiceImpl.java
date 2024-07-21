@@ -2,6 +2,7 @@ package com.ing.ingproject.service;
 
 import com.ing.ingproject.model.Product;
 import com.ing.ingproject.model.ProductDatabase;
+import com.ing.ingproject.model.ProductUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +34,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addProduct(Product product) {
         productDatabase.addProduct(product);
+    }
+
+    @Override
+    public Optional<Product> updateProduct(String productName, ProductUpdateRequest updatedProduct) {
+        return productDatabase.updateProduct(productName, updatedProduct);
     }
 }

@@ -1,6 +1,7 @@
 package com.ing.ingproject.utils;
 
 import com.ing.ingproject.model.Product;
+import com.ing.ingproject.model.ProductUpdateRequest;
 
 public class ProductTestUtils {
 
@@ -14,5 +15,11 @@ public class ProductTestUtils {
 
     public static Product createDefaultProduct() {
         return new Product(DEFAULT_PRODUCT_NAME, DEFAULT_PRODUCT_PRICE);
+    }
+
+    public static ProductUpdateRequest createDefaultProductUpdate() {
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
+        productUpdateRequest.setPrice(5.0);
+        return productUpdateRequest;
     }
 }
