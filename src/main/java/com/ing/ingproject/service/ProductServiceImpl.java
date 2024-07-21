@@ -40,4 +40,17 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> updateProduct(String productName, ProductUpdateRequest updatedProduct) {
         return productDatabase.updateProduct(productName, updatedProduct);
     }
+
+    @Override
+    public boolean deleteProduct(String productName) {
+        Optional<Product> foundProductOptional = productDatabase.getProducts().stream()
+                .filter(product -> productName.equals(product.productName()))
+                .findFirst();
+
+        if (foundProductOptional.isPresent()) {
+            productDatabase.deleteProduct(foundProductOptional.get());
+            return true;
+        }
+        return false;
+    }
 }

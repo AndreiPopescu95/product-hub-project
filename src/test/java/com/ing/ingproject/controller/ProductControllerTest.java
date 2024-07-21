@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,6 +24,7 @@ import static com.ing.ingproject.utils.ProductTestUtils.createProduct;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -34,6 +36,10 @@ class ProductControllerTest {
 
     private static final String GET_ALL_PRODUCTS = "/v1/products/all";
     private static final String FIND_PRODUCT = "/v1/products/{productName}";
+    private static final String UPDATE_PRODUCT = "/v1/products/update/{productName}";
+    private static final String DELETE_PRODUCT = "/v1/products/delete/{productName}";
+    private static final String ADD_PRODUCT = "/v1/products/add";
+    private static final String PRODUCT_NOT_FOUND = "Product not found with name: %s";
 
     private final String PRODUCT_1 = "Product 1";
     private final String PRODUCT_2 = "Product 2";
@@ -81,7 +87,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get(FIND_PRODUCT,PRODUCT_1))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is(String.format("Product not found with name: %s", PRODUCT_1))));
+                .andExpect(jsonPath("$", is(String.format(PRODUCT_NOT_FOUND, PRODUCT_1))));
     }
 
     @Test
@@ -89,8 +95,8 @@ class ProductControllerTest {
     public void addProductTest() throws Exception {
         Product product = createDefaultProduct();
 
-        mockMvc.perform(post("/v1/products/add")
-                        .contentType("application/json")
+        mockMvc.perform(post(ADD_PRODUCT)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.productName").value(product.productName()))
@@ -105,12 +111,21 @@ class ProductControllerTest {
 
         when(productService.updateProduct(PRODUCT_1, productUpdate)).thenReturn(Optional.of(product));
 
-        mockMvc.perform(put("/v1/products/update/{productName}", PRODUCT_1)
-                        .contentType("application/json")
+        mockMvc.perform(put(UPDATE_PRODUCT, PRODUCT_1)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productUpdate)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.productName").value(PRODUCT_1))
                 .andExpect(jsonPath("$.price").value(productUpdate.getPrice()));
+    }
+
+    @Test
+    @WithMockUser(username = "user")
+    public void deleteProductTest() throws Exception {
+        when(productService.deleteProduct(PRODUCT_1)).thenReturn(true);
+
+        mockMvc.perform(delete(DELETE_PRODUCT, PRODUCT_1))
+                .andExpect(status().isNoContent());
     }
 
     private Set<Product> createProductList() {

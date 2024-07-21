@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -61,14 +62,8 @@ class ProductServiceImplTest {
         verify(productDatabase).addProduct(expectedProduct);
     }
 
-    private Set<Product> generateDefaultProductList() {
-        Product product = createDefaultProduct();
-
-        return Set.of(product);
-    }
-
     @Test
-    void updateProduct() {
+    void updateProductTest() {
         double productPrice = 5.0;
         ProductUpdateRequest updatedProduct = new ProductUpdateRequest(productPrice);
 
@@ -79,5 +74,25 @@ class ProductServiceImplTest {
 
         assertTrue(finalProduct.isPresent());
         assertEquals(productPrice, finalProduct.get().price());
+    }
+
+    @Test
+    void deleteProductTest() {
+        Set<Product> products = generateDefaultProductList();
+
+        when(productDatabase.getProducts()).thenReturn(products);
+
+        boolean deleted = productService.deleteProduct(DEFAULT_PRODUCT_NAME);
+
+        verify(productDatabase).deleteProduct(products.stream().iterator().next());
+        assertTrue(deleted);
+    }
+
+    private Set<Product> generateDefaultProductList() {
+        Set<Product> products = new HashSet<>();
+        Product product = createDefaultProduct();
+        products.add(product);
+
+        return products;
     }
 }

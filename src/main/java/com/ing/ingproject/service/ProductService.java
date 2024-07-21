@@ -15,4 +15,6 @@ public interface ProductService {
     void addProduct(Product product);
 
     Optional<Product> updateProduct(String productName, ProductUpdateRequest updatedProduct);
+
+    boolean deleteProduct(String productName);
 }

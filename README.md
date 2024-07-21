@@ -1,29 +1,16 @@
 # Spring Boot Product API
 
-This project is a simple Spring Boot application that provides RESTful endpoints for managing products. Each product has a name and a price. The application supports retrieving all products and finding a product by its name. It also features custom exception handling and basic security.
+This project is a simple Spring Boot application that provides RESTful endpoints for managing products. Each product has a name and a price. The application supports retrieving all products, adding a product, finding a product by its name as well as deleting and updating a product by name.  It also features custom exception handling and basic security with basic rol based authentication.
 
 ## Features
 
 - **Get All Products**: Retrieve a list of all products.
 - **Find Product by Name**: Retrieve a specific product by its name.
+- **Update Product by Name**: Updates a specific product by its name.
+- **Delete Product by Name**: Deletes a specific product by its name.
+- **Add Product**: Adds a product
 - **Exception Handling**: Custom exception handling for not found products.
 - **Security**: Basic authentication to protect the endpoints.
-
-## Technologies Used
-
-- **Java 17**
-- **Spring Boot**
-- **Spring Web**
-- **Spring Security**
-- **Lombok**
-- **JUnit 5**
-- **MockMvc**
-- **Maven**
-
-## Prerequisites
-
-- Java 17 or higher
-- Maven 3.6.0 or higher
 
 ## Getting Started
 
@@ -102,7 +89,7 @@ Authorization: Basic <base64_encoded_credentials>
 ]
 ```
 
-### Find Product by Name
+### Find Product by name
 
 - **URL**: `/api/products/{productName}`
 - **Method**: `GET`
@@ -137,7 +124,7 @@ Authorization: Basic <base64_encoded_credentials>
 }
 ```
 
-### Update Product
+### Update Product by name
 
 - **URL**: `/api/products/update/{productName}`
 - **Method**: `PUT`
@@ -149,6 +136,13 @@ Authorization: Basic <base64_encoded_credentials>
 ```
 - **Response**: JSON object of the updated product
 
+#### Example Request
+
+```http
+GET /api/products/delete/Product%201
+Authorization: Basic <base64_encoded_credentials>
+```
+
 #### Example Response
 
 ```json
@@ -156,6 +150,19 @@ Authorization: Basic <base64_encoded_credentials>
   "productName": "Product 1",
   "price": 10.0
 }
+```
+
+### Delete Product by name
+
+- **URL**: `/api/products/delete/{productName}`
+- **Method**: `DELETE`
+- **Response**: 204 ok
+
+#### Example Request
+
+```http
+GET /api/products/delete/Product%201
+Authorization: Basic <base64_encoded_credentials>
 ```
 
 ### Exception Handling

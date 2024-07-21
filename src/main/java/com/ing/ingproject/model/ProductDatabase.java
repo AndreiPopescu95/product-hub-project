@@ -28,12 +28,15 @@ public class ProductDatabase {
                     productPatch.getPrice() != null ? productPatch.getPrice() : existingProduct.price()
             );
 
-            products.remove(existingProduct);
-            products.add(updatedProduct);
+            deleteProduct(existingProduct);
+            addProduct(updatedProduct);
 
             return Optional.of(updatedProduct);
         }
         return Optional.empty();
     }
 
+    public void deleteProduct(Product productToDelete) {
+        products.remove(productToDelete);
+    }
 }

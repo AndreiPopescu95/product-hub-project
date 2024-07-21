@@ -7,6 +7,7 @@ import com.ing.ingproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,14 @@ public class ProductController {
         Optional<Product> updateProduct = productService.updateProduct(productName, updatedProduct);
         if (updateProduct.isPresent()) {
             return updateProduct.get();
+        }
+        throw new ProductNotFoundException("Product not found with name: " + productName);
+    }
+
+    @DeleteMapping("/products/delete/{productName}")
+    public ResponseEntity<?> removeProduct(@PathVariable String productName) {
+        if (productService.deleteProduct(productName)) {
+            return ResponseEntity.noContent().build();
         }
         throw new ProductNotFoundException("Product not found with name: " + productName);
     }
