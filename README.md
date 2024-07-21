@@ -17,8 +17,8 @@ This project is a simple Spring Boot application that provides RESTful endpoints
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/product-api.git
-cd product-api
+git clone https://github.com/AndreiPopescu95/product-hub-project.git
+cd product-hub-project
 ```
 
 ### Build the Project
